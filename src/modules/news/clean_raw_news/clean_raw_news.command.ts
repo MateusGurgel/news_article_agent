@@ -3,22 +3,18 @@ import {GeminiFlash} from "../../llms/gemini_flash/geminiFlash";
 import dedent from "ts-dedent";
 import {CommandError} from "../../../core/errors";
 
-interface CreateNewsCommandDTO {
-    raw_news: string
-}
-
 interface CleanRawNewsCommandResponseDTO {
     title: string
     content: string
     date: string
 }
 
-export class CleanRawNewsCommand implements Command<CreateNewsCommandDTO, CleanRawNewsCommandResponseDTO> {
+export class CleanRawNewsCommand implements Command<string, CleanRawNewsCommandResponseDTO> {
 
     constructor(private readonly gemini_flash: GeminiFlash) {
     }
 
-    handle(dto: CreateNewsCommandDTO) : Promise<CleanRawNewsCommandResponseDTO> {
+    handle(raw_news: string): Promise<CleanRawNewsCommandResponseDTO> {
 
         const responseSchema = {
             type: "object",
@@ -43,7 +39,7 @@ export class CleanRawNewsCommand implements Command<CreateNewsCommandDTO, CleanR
         const prompt = dedent`
                 You are a powerful news article scrapper, you are tasked with cleaning the raw news provided by the user.
                 <raw_news>
-                    ${dto.raw_news}
+                    ${raw_news}
                 <raw_news>
             `
 

@@ -4,6 +4,12 @@ export class ScraperError extends Error {
     }
 }
 
+export class UnableToFetchError extends Error {
+    constructor(message: string) {
+        super(message)
+    }
+}
+
 export class UnstructuredError extends Error {
     constructor(message: string) {
         super(message)
