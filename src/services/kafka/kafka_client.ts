@@ -1,6 +1,10 @@
 import { Kafka, KafkaConfig } from 'kafkajs';
+import { KAFKA_BROKER, KAFKA_USERNAME, KAFKA_PASSWORD } from "../../utils/env";
 
-const kafkaConfig: KafkaConfig = { brokers: ['localhost:9092'] }
-const kafka = new Kafka(kafkaConfig)
+const kafkaConfig: KafkaConfig = {
+    brokers: [KAFKA_BROKER],
+};
 
-export default kafka
+const kafka = new Kafka(kafkaConfig);
+
+export default kafka;

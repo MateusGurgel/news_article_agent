@@ -7,6 +7,7 @@ import {FastifyTypedInstance} from "../core/types";
 import {routes} from "./routes";
 import {fastifyRequestContext} from "@fastify/request-context";
 import {fastifyWebsocket} from "@fastify/websocket";
+import start_kafka_router from "./kafka_router";
 
 export const app: FastifyTypedInstance = fastify({
     logger: false,
@@ -42,11 +43,13 @@ app.register(fastifyWebsocket, {
 
 app.register(routes)
 
-app.listen({port: 3000}, (err, address) => {
+app.listen({port: 3000}, async (err, address) => {
     if (err) {
         console.error(err)
         process.exit(1)
     }
+
+    // await start_kafka_router()
 
     console.log(`Server listening at ${address}`)
 })
