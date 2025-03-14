@@ -45,7 +45,9 @@
 
 ## What wold i do if i had the opportunity to do it again?
 
+- I would chunkrize the news articles into smaller chunks before saving them to the database.
 - I would use some framework like langchain for tooling and agents.
+- Cache the results of the tools to avoid unnecessary API calls.
 
 ## Models
 
