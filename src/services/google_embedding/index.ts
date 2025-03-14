@@ -1,6 +1,6 @@
-import {GeminiEmbeddingService} from "./google_embedding";
+import {GoogleEmbeddingService} from "./google_embedding";
 import {GEMINI_FLASH_API_KEY} from "../../utils/env";
 
-const googleEmbeddingService = new GeminiEmbeddingService(GEMINI_FLASH_API_KEY)
+const googleEmbeddingService = new GoogleEmbeddingService(GEMINI_FLASH_API_KEY)
 
 export default googleEmbeddingService

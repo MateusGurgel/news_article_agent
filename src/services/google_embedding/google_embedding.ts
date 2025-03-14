@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { UnstructuredError } from '../../core/errors';
 
-export class GeminiEmbeddingService {
+export class GoogleEmbeddingService {
     private genAI: GoogleGenerativeAI;
 
     constructor(apiKey: string) {

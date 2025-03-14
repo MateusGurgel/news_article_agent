@@ -7,7 +7,7 @@ const NewsSchema = pgTable('news', {
     content: text('content').notNull(),
     url: text('url').notNull(),
     date: timestamp('date', { mode: 'string' }).notNull(),
-    embedding: vector('embedding', { dimensions: 1536 }).notNull(),
+    embedding: vector('embedding', { dimensions: 768 }).notNull(),
 }, (table) => [
     index('embeddingIndex').using('hnsw', table.embedding.op('vector_cosine_ops')),
 ]);

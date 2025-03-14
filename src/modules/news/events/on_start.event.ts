@@ -10,7 +10,7 @@ export async function onNewsPublish(csv_path: string) {
             return;
         }
 
-        parse(data, { columns: true, delimiter: ',' }, (err, records) => {
+        parse(data, { columns: true, delimiter: ',' }, async (err, records) => {
             if (err) {
                 console.error('Error parsing CSV:', err);
                 return;
@@ -22,7 +22,7 @@ export async function onNewsPublish(csv_path: string) {
                 const url = record.URL
 
                 try {
-                    create_news_command.handle({Source: source, URL: url})
+                    await create_news_command.handle({Source: source, URL: url})
                 }
                 catch (error) {
                     // We should place this source and url on a queue to be scraped later.
@@ -33,6 +33,11 @@ export async function onNewsPublish(csv_path: string) {
                     if (error instanceof UnableToFetchError) {
                         // The web scrapper is being blocked, try to migrate to a different scrapper later
                         console.warn('The web scrapper is being blocked, please investigate:', error.message);
+                    }
+
+                    if (error instanceof Error) {
+                        // Some unexpected error was thrown
+                        console.error('Error while creating news:', error.message);
                     }
                 }
             }
