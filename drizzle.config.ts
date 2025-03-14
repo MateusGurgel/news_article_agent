@@ -5,7 +5,8 @@ export default defineConfig({
     out: './drizzle',
     schema: [
         './src/modules/**/**/repo/*.schema.ts',
-        './src/modules/**/repo/*.schema.ts'
+        './src/modules/**/repo/*.schema.ts',
+        './src/modules/**/repo/schemas/*.schema.ts'
     ],
     dialect: 'postgresql',
     dbCredentials: {
