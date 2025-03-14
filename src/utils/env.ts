@@ -13,3 +13,5 @@ export const KAFKA_BROKER = process.env.KAFKA_BROKER!
 export const KAFKA_USERNAME = process.env.KAFKA_USERNAME!
 
 export const KAFKA_PASSWORD = process.env.KAFKA_PASSWORD!
+
+export const GEMINI_FLASH_API_KEY = process.env.GEMINI_FLASH_API_KEY!

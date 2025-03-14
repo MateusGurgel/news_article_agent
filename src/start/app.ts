@@ -7,7 +7,7 @@ import {FastifyTypedInstance} from "../core/types";
 import {routes} from "./routes";
 import {fastifyRequestContext} from "@fastify/request-context";
 import {fastifyWebsocket} from "@fastify/websocket";
-import start_kafka_router from "./kafka_router";
+import {onNewsPublish} from "../modules/news/events/on_start.event";
 
 export const app: FastifyTypedInstance = fastify({
     logger: false,
@@ -50,6 +50,8 @@ app.listen({port: 3000}, async (err, address) => {
     }
 
     // await start_kafka_router()
+    await onNewsPublish("src/data/articles_dataset.csv")
+
 
     console.log(`Server listening at ${address}`)
 })
