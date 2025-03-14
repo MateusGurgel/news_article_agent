@@ -1,5 +1,5 @@
 import {GenerationConfig, GoogleGenerativeAI} from '@google/generative-ai';
-import {UnstructuredError} from "../../../core/errors";
+import {UnstructuredError} from "../../core/errors";
 
 export class GeminiFlash {
 

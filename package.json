@@ -26,6 +26,7 @@
     "jsonwebtoken": "^9.0.2",
     "kafkajs": "^2.2.4",
     "pg": "^8.13.1",
+    "pgvector": "^0.2.0",
     "ts-dedent": "^2.2.0",
     "zod": "^3.24.1"
   },

@@ -1,5 +1,5 @@
 import {Command} from "../../../contracts/command";
-import {GeminiFlash} from "../../llms/gemini_flash/geminiFlash";
+import {GeminiFlash} from "../../../services/gemini_flash/geminiFlash";
 import dedent from "ts-dedent";
 import {CommandError} from "../../../core/errors";
 
@@ -29,7 +29,7 @@ export class CleanRawNewsCommand implements Command<string, CleanRawNewsCommandR
                 },
                 date: {
                     type: "string",
-                    description: "The date that the article was published"
+                    description: "The date that the article was published. use the format 'YYYY-MM-DD' Ex: 2024-12-01"
                 }
             },
             required: ["title", "content", "date"]
