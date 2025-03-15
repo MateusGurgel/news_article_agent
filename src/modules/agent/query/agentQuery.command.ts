@@ -1,6 +1,6 @@
 import {Command} from "../../../contracts/command";
 import {GeminiPro} from "../../../services/gemini_pro/geminiPro";
-import {AgentQueryDto, AgentQueryResponseDto} from "./agentQuery.dto";
+import {AgentQueryDto, agentQueryResponseDto, AgentQueryResponseDto} from "./agentQuery.dto";
 
 export class AgentQueryCommand implements Command<AgentQueryDto, AgentQueryResponseDto> {
 
@@ -10,41 +10,20 @@ export class AgentQueryCommand implements Command<AgentQueryDto, AgentQueryRespo
 
     async handle(dto: AgentQueryDto){
 
-        const responseSchema = {
-            type: "object",
-            properties: {
-                answer: {
-                    type: "string",
-                    description: "The answer to the agent's query"
-                },
-                sources: {
-                    type: "array",
-                    description: "List of sources that provide additional context or reference",
-                    items: {
-                        type: "object",
-                        properties: {
-                            title: {
-                                type: "string",
-                                description: "The title of the source article"
-                            },
-                            url: {
-                                type: "string",
-                                description: "The URL of the source article"
-                            },
-                            date: {
-                                type: "string",
-                                description: "The publication date of the source article in 'YYYY-MM-DD' format"
-                            }
-                        },
-                        required: ["title", "url", "date"]
-                    },
-                    nullable: true
-                }
-            },
-            required: ["answer"]
-        };
+        const base_prompt = `
+        You are a news article agent, you are tasked with answering the user's query.
+        
+        Awnser only in JSON format, with the following schema:
+        
+        <schema>
+            ${JSON.stringify(agentQueryResponseDto.shape, null, 2)}
+        <schema>
+        
+        <query>
+            ${dto.query}
+        <query>
+        `
 
-
-        return await this.gemini_pro.generate_structured_text<AgentQueryResponseDto>(dto.query, responseSchema)
+        return await this.gemini_pro.generate_structured_text<AgentQueryResponseDto>(base_prompt)
     }
 }

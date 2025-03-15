@@ -19,7 +19,7 @@ export class GeminiPro {
         this.genAI = new GenerativeAI(apiKey)
     }
 
-    async generate_structured_text<T>(prompt: string, responseSchema: object): Promise<T> {
+    async generate_structured_text<T>(prompt: string): Promise<T> {
         const model = this.genAI.getGenerativeModel({
             model: 'gemini-1.5-pro',
 
@@ -37,6 +37,8 @@ export class GeminiPro {
 
         let result = await chat.sendMessage(prompt)
 
+        console.log(result.response.text())
+
         const calls = result.response.functionCalls()
 
         if (calls) {
@@ -49,6 +51,7 @@ export class GeminiPro {
                     throw new Error(`Tool ${call.name} not found`)
 
                 const funcResponse = await func(call.args)
+
                 console.log(funcResponse)
 
                 result = await chat.sendMessage([{
@@ -58,12 +61,16 @@ export class GeminiPro {
                     },
                 }])
 
+                console.log(result.response.text())
 
-                console.log({"result": result.response.text()})
             }
         }
 
-        const responseText = result.response.text();
+        // Gemini cannot respond with JSON when using the function calling mode, so we need to parse the response manually
+
+        let responseText = result.response.text()
+        responseText = responseText.replace('```json', '')
+        responseText = responseText.replace('```', '')
 
         try {
             return JSON.parse(responseText) as T;

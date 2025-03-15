@@ -11,7 +11,7 @@ export class GeminiFlash {
 
     async generate_structured_text<T>(prompt: string, responseSchema: object) : Promise<T> {
         const model = this.genAI.getGenerativeModel({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.0-flash-lite",
             generationConfig: {
                 responseMimeType: "application/json",
                 responseSchema
