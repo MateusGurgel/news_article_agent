@@ -3,6 +3,7 @@ import {ScraperError, UnableToFetchError} from "../../../core/errors";
 import {CleanRawNewsCommand} from "../clean_raw_news/clean_raw_news.command";
 import {GoogleEmbeddingService} from "../../../services/google_embedding/google_embedding";
 import {NewsRepository} from "../repo/news.repo";
+import { JSDOM } from 'jsdom';
 
 interface CreateNewsCommandDTO {
     Source: string
@@ -15,6 +16,13 @@ export class CreateNewsCommand implements Command<CreateNewsCommandDTO, void> {
                 private readonly geminiEmbeddingService: GoogleEmbeddingService,
                 private readonly newsRepository: NewsRepository
     ) {}
+
+    async extract_text_from_html(html: string) {
+        const dom = new JSDOM(html);
+        const main = dom.window.document.querySelector('main');
+
+        return main ? main.innerHTML : html;
+    }
 
     async handle(dto: CreateNewsCommandDTO) {
 
@@ -44,19 +52,22 @@ export class CreateNewsCommand implements Command<CreateNewsCommandDTO, void> {
             throw new UnableToFetchError(`The response was not ok, the news was not fetched, further investigation is required: ${response.status}, ${response_text}`);
         }
 
-        const response_text = await response.text();
-        const raw_news = await this.clean_raw_news_command.handle(response_text);
+        const raw_news_html = await response.text();
 
-        const raw_news_embedding = await this.geminiEmbeddingService.generateEmbedding(raw_news.content);
+        const news_text = await this.extract_text_from_html(raw_news_html);
+
+        const clean_news = await this.clean_raw_news_command.handle(news_text);
+
+        const raw_news_embedding = await this.geminiEmbeddingService.generateEmbedding(clean_news.content);
 
         await this.newsRepository.create({
-            content: raw_news.content,
-            date: raw_news.date,
+            content: clean_news.content,
+            date: clean_news.date,
             embedding: raw_news_embedding,
-            title: raw_news.title,
+            title: clean_news.title,
             url: dto.URL
         })
 
-        console.info(`The news ${raw_news.title} was created successfully`)
+        console.info(`The news ${clean_news.title} was created successfully`)
     }
 }

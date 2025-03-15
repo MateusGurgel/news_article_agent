@@ -71,6 +71,7 @@ export class GeminiPro {
         let responseText = result.response.text()
         responseText = responseText.replace('```json', '')
         responseText = responseText.replace('```', '')
+        console.log(responseText)
 
         try {
             return JSON.parse(responseText) as T;

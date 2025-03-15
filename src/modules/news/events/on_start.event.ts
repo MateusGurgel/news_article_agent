@@ -22,8 +22,7 @@ export async function onNewsPublish(csv_path: string) {
                 const url = record.URL
 
                 try {
-                    //await create_news_command.handle({Source: source, URL: url})
-                    console.log('Remove the comment to instantiate the news on the database')
+                    await create_news_command.handle({Source: source, URL: url})
                 }
                 catch (error) {
                     // We should place this source and url on a queue to be scraped later.
