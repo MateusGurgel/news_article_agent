@@ -67,6 +67,15 @@ The API returns a structured response containing the requested information along
     pnpm dev
    ```
 
+## Postman Collection
+There is a postman v2.1 collection in the /docs folder.
+
+
+Postman
+````
+/docs/News-Agent.postman_collection.json
+````
+
 ## Optimization Suggestions
 
 - Instead of processing the entire raw HTML of the news articles, extract only the essential content from key tags such as `<p>`, `<h1>`, etc., to reduce unnecessary data and improve performance.
