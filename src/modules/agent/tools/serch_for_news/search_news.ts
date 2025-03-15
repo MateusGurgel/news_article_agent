@@ -29,6 +29,6 @@ export class SearchNewsTool extends Tool {
 
     async handle(input : { query: string }) {
         const query_embedding = await this.google_embedding_service.generateEmbedding(input.query)
-        this.news_repository.search(query_embedding)
+        return this.news_repository.search(query_embedding)
     }
 }

@@ -1,10 +1,10 @@
 import {
-    FunctionCallingMode, GenerationConfig,
+    FunctionCallingMode,
     GoogleGenerativeAI as GenerativeAI,
     FunctionDeclaration
 } from "@google/generative-ai";
-import {ToolFunctionResult} from "../../modules/agent/tools/tools";
-import {UnstructuredError} from "../../core/errors";
+import { ToolFunctionResult } from "../../modules/agent/tools/tools";
+import { UnstructuredError } from "../../core/errors";
 
 export type ToolFunctions = Record<string, (...args: any[]) => Promise<ToolFunctionResult> | ToolFunctionResult>
 
@@ -19,7 +19,7 @@ export class GeminiPro {
         this.genAI = new GenerativeAI(apiKey)
     }
 
-    async generate_structured_text<T>(prompt: string, responseSchema: object) {
+    async generate_structured_text<T>(prompt: string, responseSchema: object): Promise<T> {
         const model = this.genAI.getGenerativeModel({
             model: 'gemini-1.5-pro',
 
@@ -28,18 +28,18 @@ export class GeminiPro {
             }],
             toolConfig: {
                 functionCallingConfig: {
-                    mode: FunctionCallingMode.ANY,
+                    mode: FunctionCallingMode.AUTO,
                 }
             }
         })
 
-        let result = await model.generateContent(prompt)
+        const chat = model.startChat()
+
+        let result = await chat.sendMessage(prompt)
 
         const calls = result.response.functionCalls()
 
-
-
-        if (calls)
+        if (calls) {
             for (let i = 0; i < calls.length; i++) {
                 const call = calls[i]
 
@@ -49,21 +49,19 @@ export class GeminiPro {
                     throw new Error(`Tool ${call.name} not found`)
 
                 const funcResponse = await func(call.args)
+                console.log(funcResponse)
 
-                model.generationConfig = {
-                    responseMimeType: "application/json",
-                        responseSchema
-                } as GenerationConfig
-
-                result = await model.generateContent([{
-                    text: funcResponse,
+                result = await chat.sendMessage([{
                     functionResponse: {
                         name: call.name,
-                        response: funcResponse
+                        response: {funcResponse},
                     },
-
                 }])
+
+
+                console.log({"result": result.response.text()})
             }
+        }
 
         const responseText = result.response.text();
 

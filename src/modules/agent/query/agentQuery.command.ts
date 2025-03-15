@@ -1,15 +1,11 @@
 import {Command} from "../../../contracts/command";
-import {NewsRepository} from "../../news/repo/news.repo";
 import {GeminiPro} from "../../../services/gemini_pro/geminiPro";
 import {AgentQueryDto, AgentQueryResponseDto} from "./agentQuery.dto";
-import {SearchNewsTool} from "../tools/serch_for_news/search_news";
 
 export class AgentQueryCommand implements Command<AgentQueryDto, AgentQueryResponseDto> {
 
     constructor(
-        private readonly newsRepository: NewsRepository,
         private readonly gemini_pro: GeminiPro,
-        private readonly searchNewsTool: SearchNewsTool
     ) {}
 
     async handle(dto: AgentQueryDto){
