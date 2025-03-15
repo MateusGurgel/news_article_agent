@@ -1,5 +1,33 @@
 # News Article Agent with RAG/LLM
 
+# Project Description: News Article Agent with RAG/LLM
+
+## Overview
+
+The **News Article Agent** is an API designed to provide concise and informative responses to news queries. When a query is received in JSON format, such as:
+
+POST: /agent
+```json
+{
+    "query": "What is the latest news about open ai o1?"
+}
+```
+
+The API returns a structured response containing the requested information along with its respective sources:
+
+```json
+{
+    "answer": "OpenAI has announced new O3 models on December 20, 2024.",
+    "sources": [
+        {
+            "title": "OpenAI announces new O3 models",
+            "url": "https://techcrunch.com/2024/12/20/openai-announces-new-o3-model/",
+            "date": "2024-12-20 00:00:00"
+        }
+    ]
+}
+```
+
 ## Design Choices
 
 - I implemented the **Command Pattern** to decouple the logic for processing news articles and interacting with the database, allowing for easier maintenance and extensibility.
