@@ -18,20 +18,25 @@
    ```bash
    pnpm install
    ```
+   
+2.  Run the docker-compose file to start the PostgreSQL containers:
+   ```bash
+   docker-compose up
+   ```
 
-2. Access your database and run the following SQL to enable vector extension:
+3. Access your database and run the following SQL to enable vector extension:
    ```sql
    CREATE EXTENSION IF NOT EXISTS vector;
    ```
 
-3. Execute the migration to set up the database schema:
+4. Execute the migration to set up the database schema:
    ```bash
    drizzle-kit push
    ```
 
-4. Run the application:
+5. Run the application:
    ```bash
-    pnpm start
+    pnpm dev
    ```
 
 ## Optimization Suggestions
@@ -46,12 +51,15 @@
 ## What wold i do if i had the opportunity to do it again?
 
 - I would chunkrize the news articles into smaller chunks before saving them to the database.
-- I would use some framework like langchain for tooling and agents.
-- Cache the results of the tools to avoid unnecessary API calls.
+- I would use some framework like langchain for tooling and agents, because gemini api cannot use tools and respond in stuctured text at the same time (didn't know that).
+
 
 ## Models
 
-- I chose the gemini-1.5-pro model to interact with the final client and use the tools.
-- The gemini-1.5-flash was used for cleaning the scraped data.
+- I chose the gemini-1.5-pro model to interact with the final client and use the tools. Generally Speaking, using robust models to interact with clients is a good practice.
+- The gemini-2.0-flash-lite was used for cleaning the scraped data. Mainly because it is faster and, lightweight and cheaper than the pro model.
 
 
+## Demo
+
+![Demo](https://github.com/MateusGurgel/news_article_agent/blob/main/demo/demo.png)
